@@ -13,6 +13,9 @@
     button { width: 100%; padding: 10px; background: #bfa6e7; color: #fff; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; margin-top: 10px; }
     button:hover { background: #a48ad4; }
     .note { font-size: 0.95em; color: #888; margin-bottom: 10px; }
+    .output-container { position: relative; margin-top: 18px; }
+    .copy-btn { position: absolute; right: 10px; top: 10px; width: auto; margin: 0; padding: 4px 12px; font-size: 0.9em; background: rgba(191, 166, 231, 0.9); }
+    .copy-btn:hover { background: rgba(164, 138, 212, 0.9); }
   </style>
 </head>
 <body>
@@ -57,7 +60,10 @@
 
       <button type="button" onclick="generateTicket()">生成结单票</button>
     </form>
-    <textarea id="output" readonly></textarea>
+    <div class="output-container">
+      <textarea id="output" readonly></textarea>
+      <button class="copy-btn" onclick="copyTicket()">复制</button>
+    </div>
     <div class="note">可编辑金额、日期、场控、扣卡状态</div>
   </div>
   <script>
@@ -208,6 +214,18 @@
 ✧･ﾟ: ✧･ﾟ: 星月童话 :ﾟ･✧:ﾟ･✧`;
 
       document.getElementById('output').value = ticket;
+    }
+
+    // 复制票据
+    function copyTicket() {
+      const output = document.getElementById('output');
+      output.select();
+      document.execCommand('copy');
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '已复制';
+      setTimeout(() => {
+        btn.textContent = '复制';
+      }, 2000);
     }
   </script>
 </body>
