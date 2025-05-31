@@ -1,23 +1,98 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <title>结单票生成器</title>
   <style>
-    body { font-family: "微软雅黑", Arial, sans-serif; background: #f8f6ff; color: #333; }
-    .container { max-width: 500px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #e0e0e0; padding: 32px; }
-    h2 { text-align: center; margin-bottom: 16px; }
-    label { display: block; margin: 12px 0 4px; }
-    input, select { width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; }
-    textarea { width: 100%; height: 220px; margin-top: 18px; font-size: 1.1em; border-radius: 8px; border: 1px solid #bbb; padding: 10px; }
-    button { width: 100%; padding: 10px; background: #bfa6e7; color: #fff; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; margin-top: 10px; }
-    button:hover { background: #a48ad4; }
-    .note { font-size: 0.95em; color: #888; margin-bottom: 10px; }
-    .output-container { position: relative; margin-top: 18px; }
-    .copy-btn { position: absolute; right: 10px; top: 10px; width: auto; margin: 0; padding: 4px 12px; font-size: 0.9em; background: rgba(191, 166, 231, 0.9); }
-    .copy-btn:hover { background: rgba(164, 138, 212, 0.9); }
+    body {
+      font-family: "微软雅黑", Arial, sans-serif;
+      background: #f8f6ff;
+      color: #333;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px #e0e0e0;
+      padding: 32px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 4px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 220px;
+      margin-top: 18px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: 1px solid #bbb;
+      padding: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #bfa6e7;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #a48ad4;
+    }
+
+    .note {
+      font-size: 0.95em;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .output-container {
+      position: relative;
+      margin-top: 18px;
+    }
+
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: auto;
+      margin: 0;
+      padding: 4px 12px;
+      font-size: 0.9em;
+      background: rgba(191, 166, 231, 0.9);
+    }
+
+    .copy-btn:hover {
+      background: rgba(164, 138, 212, 0.9);
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h2>结单票生成器</h2>
@@ -32,7 +107,7 @@
       <input type="text" list="danlei-list" id="danlei" autocomplete="off" required>
       <datalist id="danlei-list">
       </datalist>
-      
+
       <label>单 数</label>
       <input type="number" list="danshu-list" id="danshu" value="1" required>
       <datalist id="danshu-list">
@@ -50,7 +125,8 @@
       <input type="text" id="riqi" required>
 
       <label>场 控</label>
-      <input type="text" id="changkong" value="软肋" required>
+      <input type="text" list="changkong-list" id="changkong" value="软肋" required>
+      <datalist id="changkong-list"></datalist>
 
       <label>扣卡状态</label>
       <select id="kouka">
@@ -112,7 +188,7 @@
     };
     let priceMap = defaultPriceMap;
     // 检查 price-map.json 是否存在
-    fetch('price-map.json', {method: 'HEAD'})
+    fetch('price-map.json', { method: 'HEAD' })
       .then(res => {
         if (res.ok) {
           // 存在则加载外部文件
@@ -156,7 +232,7 @@
     // 场控默认值
     function setChangkongDefault() {
       // 检查 constants.json 是否存在
-      fetch('constants.json', {method: 'HEAD'})
+      fetch('constants.json', { method: 'HEAD' })
         .then(res => {
           if (res.ok) {
             // 存在则加载
@@ -167,11 +243,18 @@
           }
         })
         .then(data => {
+          const changkongList = document.getElementById('changkong-list');
+          changkongList.innerHTML = '';
+          let changkongArr = ['软肋', '小柔'];
           if (data && Array.isArray(data.changkong) && data.changkong.length > 0) {
-            document.getElementById('changkong').value = data.changkong[0];
-          } else {
-            document.getElementById('changkong').value = '软肋';
+            changkongArr = data.changkong;
           }
+          changkongArr.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            changkongList.appendChild(opt);
+          });
+          document.getElementById('changkong').value = changkongArr[0];
         });
     }
     setChangkongDefault();
@@ -229,4 +312,5 @@
     }
   </script>
 </body>
+
 </html>
