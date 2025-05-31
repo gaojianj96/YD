@@ -125,8 +125,8 @@
       <input type="text" id="riqi" required>
 
       <label>场 控</label>
-      <input type="text" list="changkong-list" id="changkong" value="软肋" required>
-      <datalist id="changkong-list"></datalist>
+      <input type="text" list="changkong-list" id="changkong" value="软肋" required onfocus="this.removeAttribute('readonly');this.value='';document.getElementById('changkong-list').style.display='block';" onblur="setTimeout(()=>{document.getElementById('changkong-list').style.display='none';},200)">
+      <datalist id="changkong-list" style="display:block;"></datalist>
 
       <label>扣卡状态</label>
       <select id="kouka">
